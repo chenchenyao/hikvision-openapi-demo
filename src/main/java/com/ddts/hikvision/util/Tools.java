@@ -1,4 +1,4 @@
-package com.example.javaproject.haikang.sdk;
+package com.ddts.hikvision.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,7 +11,7 @@ import java.io.InputStream;
  * @author
  * @create 2019-01-11 17:06
  **/
-public class  Tools {
+public class Tools {
 
     /**
      * 将图片写到 硬盘指定目录下

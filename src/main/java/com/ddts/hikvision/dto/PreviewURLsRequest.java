@@ -1,4 +1,4 @@
-package com.example.javaproject.haikang.entity;
+package com.ddts.hikvision.dto;
 
 public class PreviewURLsRequest {
 	private String cameraIndexCode;
