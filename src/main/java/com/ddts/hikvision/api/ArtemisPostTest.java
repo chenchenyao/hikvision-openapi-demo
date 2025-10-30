@@ -145,6 +145,46 @@ public class ArtemisPostTest {
 	}
 
 
+	//Download recordings
+	public static String download(DownloadRequest downloadRequest) throws Exception {
+		String downloadDataApi = ARTEMIS_PATH +"/api/video/v1/download";
+		Map<String,String> path = new HashMap<String,String>(2){
+			{
+				put("https://",downloadDataApi);
+			}
+		};
+		downloadRequest.setUrl("rtsp://10.18.66.12:554/sms/HCPEurl/commonvideobiz_yL3BB0IJEfmZXqcbVjpen%2BT1uYbybvT38kqzRR6XaakK2GcRosSrw4A9o%2FFtIeHzaYm3O%2Fmn%2FWOZwbiNhwhk9eTw1oiI8YFyIY5tLp5CJu7RnoINpei1W22NqnwyDt%2FcnLNZEnXoejzLazu9A0oXWVwxjsV99%2FtZXqJx8K7601%2BywBbErC80PzfVyFWd5HKmEz8NVdNCVT2fqokL8868ffQi8uMYNLXYSE0FEsqunLs%3D");
+		downloadRequest.setAuthentication("Fsd8eugj2+RYG6EKEgN8/EHy6o5XPdkxD8t7Dy+EH6moE4G0X9+60C7PucJ8TlZOdGIK3lH5W7JDFdrercIsiJb1bl9Y52PGA/K/QXIff+84XMQ=");
+		downloadRequest.setBeginTime("2022-09-07T19:38:16+08:00");
+		downloadRequest.setEndTime("2022-09-07T19:38:16+08:00");
+		downloadRequest.setVideoType(1);
+
+		String body=JSON.toJSONString(downloadRequest);
+		String result = ArtemisHttpUtil.doPostStringArtemis(CONFIG, path, body, null,  null, "application/json");
+		return result;
+	}
+
+	//Control the PTZ
+	public static String controlling(ControllingRequest controllingRequest) throws Exception {
+		String controllingDataApi = ARTEMIS_PATH +"/api/video/v1/ptzs/controlling";
+		Map<String,String> path = new HashMap<String,String>(2){
+			{
+				put("https://",controllingDataApi);
+			}
+		};
+		controllingRequest.setCameraIndexCode("2");
+		controllingRequest.setCommand("GOTO_PRESET");
+		controllingRequest.setPresetIndex(20);
+		controllingRequest.setAction(1);
+		controllingRequest.setSpeed(4);
+		controllingRequest.setPatrolIndex(5);
+
+		String body=JSON.toJSONString(controllingRequest);
+		String result = ArtemisHttpUtil.doPostStringArtemis(CONFIG, path, body, null,  null, "application/json");
+		return result;
+	}
+
+
 	public static void main(String[] args) throws Exception {
 //		String cameraInfo = cameras(new CamerasRequest());
 //		System.out.println(cameraInfo);
@@ -154,8 +194,10 @@ public class ArtemisPostTest {
 //		System.out.println(playback);
 //		String version = version(new VersionRequest());
 //		System.out.println(version);
-		String talkUrl = talkURLs(new TalkURLsRequest());
-		System.out.println(talkUrl);
+//		String talkUrl = talkURLs(new TalkURLsRequest());
+//		System.out.println(talkUrl);
+		//download(new DownloadRequest());
+		controlling(new ControllingRequest());
 	}
 
 }
