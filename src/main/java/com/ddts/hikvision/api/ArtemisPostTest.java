@@ -1,22 +1,14 @@
 package com.ddts.hikvision.api;   //修改包路径
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.*;
 import com.ddts.hikvision.dto.*;
-import com.ddts.hikvision.util.Tools;
+import com.ddts.hikvision.vo.CameraInfoVO;
 import com.hikvision.artemis.sdk.ArtemisHttpUtil;
-import com.hikvision.artemis.sdk.Response;
 import com.hikvision.artemis.sdk.config.ArtemisConfig;
 import com.hikvision.artemis.sdk.constant.Constants;
-import com.hikvision.artemis.sdk.constant.SystemHeader;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.hikvision.artemis.sdk.util.HttpUtil.wrapClient;
@@ -78,6 +70,31 @@ public class ArtemisPostTest {
 		camerasRequest.setPageSize(10);
 		String body = JSON.toJSONString(camerasRequest);
 		String result = ArtemisHttpUtil.doPostStringArtemis(CONFIG, path, body, null, null, "application/json");
+
+		// 转换为 JSONObject
+		JSONObject jsonObject = JSONObject.parseObject(result);
+		String code = (String) jsonObject.get("code");
+		String msg = (String) jsonObject.get("msg");
+		System.out.println(code);
+		System.out.println(msg);
+
+		// 逐层获取 data -> list
+		JSONObject data = jsonObject.getJSONObject("data");
+		Integer total = (Integer)data.get("total");
+		List<CameraInfoVO> cameraList1 = data.getList("list", CameraInfoVO.class);
+//		// 方式1：通过 JSONPath 提取并转换（推荐）
+//		List<CameraInfoVO> cameraList2 = JSONPath.of("$.data.list")// 创建路径
+//				.eval(JSON.parseObject(result)) // 解析 JSON 并执行路径
+//				.toList(CameraInfoVO.class); // 转换为目标列表
+//
+//		// 方式2：如果需要更明确的类型声明，可使用 TypeReference
+//		List<CameraInfoVO> cameraList3 = JSONPath.of("$.data.list")
+//				.eval(JSON.parseObject(result))
+//				.to(new TypeReference<List<CameraInfoVO>>() {});
+
+		JSONArray listJson = (JSONArray) JSONPath.of("$.data.list").eval(jsonObject);
+		List<CameraInfoVO> cameraList = listJson.toJavaList(CameraInfoVO.class);
+
 		return result;
 	}
 
@@ -164,7 +181,30 @@ public class ArtemisPostTest {
 		return result;
 	}
 
+
+	//Get download progress and download URL by the download ID
+	public static String downloadURL(DownloadURLRequest downloadURLRequest) throws Exception {
+		String downloadURLDataApi = ARTEMIS_PATH +"/api/video/v1/downloadURL";
+		Map<String,String> path = new HashMap<String,String>(2){
+			{
+				put("https://",downloadURLDataApi);
+			}
+		};
+		downloadURLRequest.setDownloadID("");
+		String body=JSON.toJSONString(downloadURLRequest);
+		String result = ArtemisHttpUtil.doPostStringArtemis(CONFIG, path, body, null,  null, "application/json");
+		return result;
+	}
+
 	//Control the PTZ
+
+	/**
+	 *云台控制指令（不区分大小写）："LEFT"（左平移）、"RIGHT"（右平移）、"UP"（上俯仰）、"DOWN"（下俯仰）、
+	 * "ZOOM_IN"（放大）、"ZOOM_OUT"（缩小）、
+	 * "LEFT_UP"（左平移+上俯仰）、"LEFT_DOWN"（左平移+下俯仰）、"RIGHT_UP"（右平移+上俯仰）、"RIGHT_DOWN"（右平移+下俯仰）、
+	 * "FOCUS_NEAR"（调焦+）、"FOCUS_FAR"（调焦-）、"IRIS_ENLARGE"（光圈+）、"IRIS_REDUCE"（光圈-）、"GOTO_PRESET"（调用预置位）、"RUN_PATROL"（启动巡逻）。该字段值的最大长度为16位
+	 *
+	 */
 	public static String controlling(ControllingRequest controllingRequest) throws Exception {
 		String controllingDataApi = ARTEMIS_PATH +"/api/video/v1/ptzs/controlling";
 		Map<String,String> path = new HashMap<String,String>(2){
@@ -186,8 +226,8 @@ public class ArtemisPostTest {
 
 
 	public static void main(String[] args) throws Exception {
-//		String cameraInfo = cameras(new CamerasRequest());
-//		System.out.println(cameraInfo);
+		String cameraInfo = cameras(new CamerasRequest());
+		System.out.println(cameraInfo);
 //		String liveViewUrl = previewURLs(new PreviewURLsRequest());
 //		System.out.println(liveViewUrl);
 //		String playback = playbackURLs(new PlaybackURLsRequest());
@@ -197,7 +237,7 @@ public class ArtemisPostTest {
 //		String talkUrl = talkURLs(new TalkURLsRequest());
 //		System.out.println(talkUrl);
 		//download(new DownloadRequest());
-		controlling(new ControllingRequest());
+		//controlling(new ControllingRequest());
 	}
 
 }

@@ -12,7 +12,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>3.0.2</spring-boot.version>
-        <fastjson.version>1.2.83</fastjson.version>
+<!--        <fastjson.version>1.2.83</fastjson.version>-->
+        <fastjson2.version>2.0.43</fastjson2.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
     </properties>
@@ -48,10 +49,16 @@
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/artemis-http-client-1.1.15.RELEASE.jar</systemPath>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>fastjson</artifactId>-->
+<!--            <version>${fastjson.version}</version>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
         </dependency>
 
         <dependency>
