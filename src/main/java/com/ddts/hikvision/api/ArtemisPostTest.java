@@ -212,12 +212,12 @@ public class ArtemisPostTest {
 				put("https://",controllingDataApi);
 			}
 		};
-		controllingRequest.setCameraIndexCode("2");
-		controllingRequest.setCommand("GOTO_PRESET");
-		controllingRequest.setPresetIndex(20);
-		controllingRequest.setAction(1);
-		controllingRequest.setSpeed(4);
-		controllingRequest.setPatrolIndex(5);
+		controllingRequest.setCameraIndexCode("10");
+		controllingRequest.setCommand("RIGHT");
+		controllingRequest.setPresetIndex(39);
+		controllingRequest.setAction(0);
+		controllingRequest.setSpeed(40);
+		controllingRequest.setPatrolIndex(null);
 
 		String body=JSON.toJSONString(controllingRequest);
 		String result = ArtemisHttpUtil.doPostStringArtemis(CONFIG, path, body, null,  null, "application/json");
@@ -226,8 +226,8 @@ public class ArtemisPostTest {
 
 
 	public static void main(String[] args) throws Exception {
-		String cameraInfo = cameras(new CamerasRequest());
-		System.out.println(cameraInfo);
+//		String cameraInfo = cameras(new CamerasRequest());
+//		System.out.println(cameraInfo);
 //		String liveViewUrl = previewURLs(new PreviewURLsRequest());
 //		System.out.println(liveViewUrl);
 //		String playback = playbackURLs(new PlaybackURLsRequest());

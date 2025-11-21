@@ -6,6 +6,32 @@ public class CamerasRequest {
 	private String siteIndexCode;
 	private String deviceType;
 	private Integer bRecordSetting;
+	private String regionIndexCode;
+	private String cameraName;
+
+	public String getCameraName() {
+		return cameraName;
+	}
+
+	public void setCameraName(String cameraName) {
+		this.cameraName = cameraName;
+	}
+
+	public Integer getbRecordSetting() {
+		return bRecordSetting;
+	}
+
+	public void setbRecordSetting(Integer bRecordSetting) {
+		this.bRecordSetting = bRecordSetting;
+	}
+
+	public String getRegionIndexCode() {
+		return regionIndexCode;
+	}
+
+	public void setRegionIndexCode(String regionIndexCode) {
+		this.regionIndexCode = regionIndexCode;
+	}
 
 	public Integer getPageNo() {
 		return pageNo;
